@@ -7,7 +7,6 @@ function App() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
 
   //function to handle signup,
   // when being clicked the function updates the loading state to true and clears any previous messages.
@@ -18,18 +17,17 @@ function App() {
   //  it stores the token in the local storage and updates the message state to indicate success.
   //  If the request fails, it catches the error and updates the message state with the error message.
   // Finally, it sets the loading state back to false.
-  const handleSignUp = async () => {
+  const handleLogin = async () => {
     setLoading(true);
     setMessage("");
-
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          // name,
           email,
           password,
         }),
@@ -42,7 +40,7 @@ function App() {
       }
 
       localStorage.setItem("dailyflow-token", data.token);
-      setMessage("Signup successfull");
+      setMessage("Login successfull");
       console.log("Login response:", data);
     } catch (error) {
       const errorMessage =
@@ -53,19 +51,70 @@ function App() {
       setLoading(false);
     }
   };
+
+  const handleSignin = async () => {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      localStorage.setItem("dailyflow-token", data.token);
+      setMessage("Login successfull");
+      console.log("Login response:", data);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
+      setMessage(errorMessage);
+      console.error("Login error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ padding: "40px" }}>
-      <button onClick={handleSignUp} disabled={loading}>
-        {loading ? "Signing up..." : "Sign up"}
+      <button onClick={handleLogin} disabled={loading}>
+        {loading ? "Logging in..." : "Log in"}
       </button>
 
       {message && <p>{message}</p>}
-      <input
+      {/* <input
         type="text"
         value={name}
         onChange={(event) => setName(event.target.value)}
         placeholder="Name"
+      /> */}
+      <input
+        type="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        placeholder="Email"
       />
+      <input
+        type="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        placeholder="Password"
+      />
+      <button onClick={handleSignin} disabled={loading}>
+        {loading ? "Sign  in..." : "Sign in"}
+      </button>
     </div>
   );
 }

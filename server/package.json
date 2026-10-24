@@ -2,10 +2,10 @@
   "name": "dailyflow-server",
   "version": "1.0.0",
   "description": "DailyFlow backend API",
-  "main": "src/server.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
